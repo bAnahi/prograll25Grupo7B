@@ -11,4 +11,25 @@
         <maven.compiler.target>11</maven.compiler.target>
         <exec.mainClass>com.prograii25.prograiii25grupo7b.PrograiII25Grupo7B</exec.mainClass>
     </properties>
+<dependencies>
+    <dependency>
+        <groupId>com.microsoft.sqlserver</groupId>
+        <artifactId>mssql-jdbc</artifactId>
+        <version>12.2.0.jre11</version>
+    </dependency>
+</dependencies>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <configuration>
+                <mainClass>com.prograii25.prograii25grupo7b.PrograiII25Grupo7B</mainClass>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+
 </project>
+
