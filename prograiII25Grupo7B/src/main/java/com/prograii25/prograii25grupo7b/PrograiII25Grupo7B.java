@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 
-package com.prograii25.prograiii25grupo7b;
+package com.prograii25.prograii25grupo7b;
 
 /**
  *
