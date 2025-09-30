@@ -1,5 +1,5 @@
 
-package com.prograii25.prograii25grupo7b;
+/* package com.prograii25.prograii25grupo7b;
 
 import java.sql.Connection; 
 import java.sql.DriverManager; 
@@ -25,3 +25,4 @@ public class ConexionSQL {
         return conn;
     }
 }
+*/

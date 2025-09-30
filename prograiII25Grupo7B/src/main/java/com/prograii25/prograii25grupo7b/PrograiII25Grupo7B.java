@@ -1,119 +1,106 @@
 package com.prograii25.prograii25grupo7b;
 
-import com.prograii25.prograii25grupo7b.servicios.ServicioUsuario;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.prograii25.prograii25grupo7b.db.Usuario;
+import com.prograii25.prograii25grupo7b.persistencia.UsuarioJpaController;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.Scanner;
 
 public class PrograiII25Grupo7B {
 
     public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
+        EntityManager em = emf.createEntityManager();
         Scanner scanner = new Scanner(System.in);
-        int opcion;
 
+        UsuarioJpaController usuarioJpa = new UsuarioJpaController(em.getEntityManagerFactory());
+
+        // ===== LOGIN INICIAL =====
+        boolean loginOk = false;
+        while (!loginOk) {
+            System.out.println("===== LOGIN =====");
+            System.out.print("Correo: ");
+            String correo = scanner.nextLine();
+
+            System.out.print("Contrase�a: ");
+            String contrasena = scanner.nextLine();
+
+            loginOk = usuarioJpa.login(correo, contrasena);
+
+            if (!loginOk) {
+                System.out.println("Credenciales incorrectas. Intente nuevamente.");
+            }
+        }
+
+        // ===== MEN� PRINCIPAL =====
+        int opcion;
         do {
-            System.out.println("\n===== MENÚ PRINCIPAL =====");
-            System.out.println("1. Probar conexión y listar tablas");
-            System.out.println("2. Login de usuario");
-            System.out.println("3. Registrar usuario");
-            System.out.println("4. Salir");
-            System.out.print("Seleccione una opción: ");
+            System.out.println("\n===== MEN� PRINCIPAL =====");
+            System.out.println("1. Listar usuarios");
+            System.out.println("2. Registrar usuario");
+            System.out.println("3. Salir");
+            System.out.print("Seleccione una opci�n: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
 
             switch (opcion) {
                 case 1:
-                    probarConexion();
+                    listarUsuarios(em);
                     break;
                 case 2:
-                    loginUsuario(scanner);
+                    registrarUsuario(em, scanner);
                     break;
                 case 3:
-                    registrarUsuario(scanner);
-                    break;
-                case 4:
-                    System.out.println("👋 Saliendo del sistema...");
+                    System.out.println("Saliendo...");
                     break;
                 default:
-                    System.out.println("⚠️ Opción no válida. Intente nuevamente.");
+                    System.out.println("Opci�n no v�lida.");
             }
-        } while (opcion != 4);
+        } while (opcion != 3);
 
+        em.close();
+        emf.close();
         scanner.close();
     }
 
-    private static void probarConexion() {
-        try (Connection conn = ConexionSQL.getConnection()) {
-            if (conn != null) {
-                System.out.println("✅ Conexión establecida correctamentee.");
-
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(
-                        "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'");
-
-                System.out.println("Tablas en la base de datos EmpresaTecnologia:");
-                while (rs.next()) {
-                    System.out.println("- " + rs.getString("TABLE_NAME"));
-                }
-
-                rs.close();
-                stmt.close();
-            } else {
-                System.out.println("❌ No se pudo establecer la conexión.");
-            }
-        } catch (SQLException e) {
-            System.out.println("⚠️ Error al trabajar con la base de datos:");
-            e.printStackTrace();
-        }
+    private static void listarUsuarios(EntityManager em) {
+        UsuarioJpaController usuarioJpa = new UsuarioJpaController(em.getEntityManagerFactory());
+        System.out.println("\n===== Lista de Usuarios =====");
+        usuarioJpa.findUsuarioEntities().forEach(u ->
+                System.out.println(u.getIdusuario() + " | " + u.getNombre() + " | " + u.getEmail() + " | " + u.getRol())
+        );
     }
 
-    private static void loginUsuario(Scanner scanner) {
-        ServicioUsuario servicioUsuario = new ServicioUsuario();
+    private static void registrarUsuario(EntityManager em, Scanner scanner) {
+        UsuarioJpaController usuarioJpa = new UsuarioJpaController(em.getEntityManagerFactory());
 
-        System.out.print("Ingrese su correo: ");
-        String correo = scanner.nextLine();
-
-        System.out.print("Ingrese su contraseña: ");
-        String contrasena = scanner.nextLine();
-
-        boolean ok = servicioUsuario.login(correo, contrasena);
-
-        if (ok) {
-            System.out.println("✅ Acceso concedido. Bienvenido al sistema.");
-        } else {
-            System.out.println("❌ Credenciales incorrectas. Intente de nuevo.");
-        }
-    }
-
-    private static void registrarUsuario(Scanner scanner) {
-        ServicioUsuario servicioUsuario = new ServicioUsuario();
-
-        System.out.print("Ingrese ID de usuario: ");
+        System.out.print("ID usuario: ");
         long idUsuario = scanner.nextLong();
         scanner.nextLine();
 
-        System.out.print("Ingrese nombre: ");
+        System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
 
-        System.out.print("Ingrese correo: ");
+        System.out.print("Correo: ");
         String correo = scanner.nextLine();
 
-        System.out.print("Ingrese contraseña: ");
+        System.out.print("Contrase�a: ");
         String contrasena = scanner.nextLine();
 
-        System.out.print("Ingrese rol (admin/usuario): ");
+        System.out.print("Rol: ");
         String rol = scanner.nextLine();
 
-        Usuario nuevo = new Usuario(idUsuario, nombre, correo, contrasena, rol);
+        Usuario nuevo = new Usuario();
+        nuevo.setIdusuario(idUsuario);
+        nuevo.setNombre(nombre);
+        nuevo.setEmail(correo);
+        nuevo.setContrasena(contrasena);
+        nuevo.setRol(rol);
 
-        boolean ok = servicioUsuario.registrarUsuario(nuevo);
-
-        if (ok) {
-            System.out.println("✅ Registro exitoso.");
-        } else {
-            System.out.println("❌ No se pudo registrar el usuario.");
-        }
+        boolean ok = usuarioJpa.registrarUsuario(nuevo);
+        System.out.println(ok ? "Usuario registrado ?" : "Error al registrar ");
     }
 }
+

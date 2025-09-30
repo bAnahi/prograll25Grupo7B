@@ -1,4 +1,4 @@
-package com.prograii25.prograii25grupo7b.servicios;
+/*package com.prograii25.prograii25grupo7b.servicios;
 
 import com.prograii25.prograii25grupo7b.ConexionSQL;
 import com.prograii25.prograii25grupo7b.Usuario;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class ServicioUsuario {
 
     public boolean login(String correo, String contrasena) {
-        String sql = "SELECT id_usuario, nombre, rol FROM Usuario WHERE correo = ? AND contrase√±a = ?";
+        String sql = "SELECT id_usuario, nombre, rol FROM Usuario WHERE correo = ? AND contraseÒa = ?";
 
         try (Connection conn = ConexionSQL.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -29,7 +29,7 @@ public class ServicioUsuario {
                 System.out.println(" Bienvenido " + nombre + " (" + rol + ")");
                 return true;
             } else {
-                System.out.println(" Usuario o contrase√±a incorrectos");
+                System.out.println(" Usuario o contraseÒa incorrectos");
                 return false;
             }
 
@@ -40,7 +40,7 @@ public class ServicioUsuario {
     }
 
     public boolean registrarUsuario(Usuario usuario) {
-        String sql = "INSERT INTO Usuario (id_usuario, nombre, correo, contrase√±a, rol) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuario (id_usuario, nombre, correo, contraseÒa, rol) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionSQL.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -77,8 +77,8 @@ public class ServicioUsuario {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("‚ùå Error registrando bit√°cora: " + e.getMessage());
+            System.out.println("? Error registrando bit·cora: " + e.getMessage());
         }
     }
 }
-
+*/
