@@ -1,4 +1,5 @@
 package com.prograii25.prograii25grupo7b;
+
 import com.prograii25.prograii25grupo7b.servicios.ServicioUsuario;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,7 +17,8 @@ public class PrograiII25Grupo7B {
             System.out.println("\n===== MENÚ PRINCIPAL =====");
             System.out.println("1. Probar conexión y listar tablas");
             System.out.println("2. Login de usuario");
-            System.out.println("3. Salir");
+            System.out.println("3. Registrar usuario");
+            System.out.println("4. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -29,12 +31,15 @@ public class PrograiII25Grupo7B {
                     loginUsuario(scanner);
                     break;
                 case 3:
+                    registrarUsuario(scanner);
+                    break;
+                case 4:
                     System.out.println("👋 Saliendo del sistema...");
                     break;
                 default:
                     System.out.println("⚠️ Opción no válida. Intente nuevamente.");
             }
-        } while (opcion != 3);
+        } while (opcion != 4);
 
         scanner.close();
     }
@@ -42,9 +47,8 @@ public class PrograiII25Grupo7B {
     private static void probarConexion() {
         try (Connection conn = ConexionSQL.getConnection()) {
             if (conn != null) {
-                System.out.println(" Conexión establecida correctamente.");
+                System.out.println("✅ Conexión establecida correctamentee.");
 
-                
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(
                         "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'");
@@ -57,14 +61,15 @@ public class PrograiII25Grupo7B {
                 rs.close();
                 stmt.close();
             } else {
-                System.out.println(" No se pudo establecer la conexión.");
+                System.out.println("❌ No se pudo establecer la conexión.");
             }
         } catch (SQLException e) {
-            System.out.println(" Error al trabajar con la base de datos:");
+            System.out.println("⚠️ Error al trabajar con la base de datos:");
             e.printStackTrace();
         }
     }
-     private static void loginUsuario(Scanner scanner) {
+
+    private static void loginUsuario(Scanner scanner) {
         ServicioUsuario servicioUsuario = new ServicioUsuario();
 
         System.out.print("Ingrese su correo: ");
@@ -76,10 +81,39 @@ public class PrograiII25Grupo7B {
         boolean ok = servicioUsuario.login(correo, contrasena);
 
         if (ok) {
-            System.out.println("Acceso concedido. Bienvenido al sistema.");
-            
+            System.out.println("✅ Acceso concedido. Bienvenido al sistema.");
         } else {
-            System.out.println(" Credenciales incorrectas. Intente de nuevo.");
+            System.out.println("❌ Credenciales incorrectas. Intente de nuevo.");
+        }
+    }
+
+    private static void registrarUsuario(Scanner scanner) {
+        ServicioUsuario servicioUsuario = new ServicioUsuario();
+
+        System.out.print("Ingrese ID de usuario: ");
+        long idUsuario = scanner.nextLong();
+        scanner.nextLine();
+
+        System.out.print("Ingrese nombre: ");
+        String nombre = scanner.nextLine();
+
+        System.out.print("Ingrese correo: ");
+        String correo = scanner.nextLine();
+
+        System.out.print("Ingrese contraseña: ");
+        String contrasena = scanner.nextLine();
+
+        System.out.print("Ingrese rol (admin/usuario): ");
+        String rol = scanner.nextLine();
+
+        Usuario nuevo = new Usuario(idUsuario, nombre, correo, contrasena, rol);
+
+        boolean ok = servicioUsuario.registrarUsuario(nuevo);
+
+        if (ok) {
+            System.out.println("✅ Registro exitoso.");
+        } else {
+            System.out.println("❌ No se pudo registrar el usuario.");
         }
     }
 }

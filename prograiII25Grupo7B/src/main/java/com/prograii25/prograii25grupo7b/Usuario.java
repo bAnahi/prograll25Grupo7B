@@ -15,7 +15,6 @@ public class Usuario {
         this.rol = rol;
     }
 
-    
     public long getIdUsuario() { return idUsuario; }
     public void setIdUsuario(long idUsuario) { this.idUsuario = idUsuario; }
 
@@ -31,4 +30,5 @@ public class Usuario {
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
 }
+
 
