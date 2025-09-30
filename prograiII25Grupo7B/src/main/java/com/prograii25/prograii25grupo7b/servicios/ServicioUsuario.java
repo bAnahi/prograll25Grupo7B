@@ -183,7 +183,7 @@ public static class Usuario {
         
         Usuario u1 = new Usuario("Ana Perez", "ana@email.com", "1234", "Admin");
         if (dao.crearUsuario(u1)) {
-            System.out.println("Usuario creado con éxito.");
+            System.out.println("Usuario creado con exito.");
         }
 
         
