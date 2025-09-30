@@ -198,7 +198,7 @@ public static class Usuario {
             Usuario mod = lista.get(0);
             mod.setNombre("Ana P. Modificada");
             if (dao.actualizarUsuario(mod)) {
-                System.out.println("Usuario actualizado con éxito.");
+                System.out.println("Usuario actualizado con exito.");
             }
         }
 
