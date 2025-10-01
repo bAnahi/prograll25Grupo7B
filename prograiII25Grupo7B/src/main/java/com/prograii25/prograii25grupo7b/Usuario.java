@@ -16,7 +16,7 @@ public class Usuario {
     @Column(name = "correo")
     private String email;
 
-    @Column(name = "contraseña") // Ajuste para coincidir
+    @Column(name = "contrasena") // Ajuste para coincidir
     private String contrasena;
 
     private String rol;

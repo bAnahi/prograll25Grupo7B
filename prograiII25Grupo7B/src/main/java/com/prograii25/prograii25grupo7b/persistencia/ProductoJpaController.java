@@ -1,17 +1,17 @@
 package com.prograii25.prograii25grupo7b.persistencia;
 
-import com.prograii25.prograii25grupo7b.db.Usuario;
+import com.prograii25.prograii25grupo7b.Producto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class UsuarioJpaController {
+public class ProductoJpaController {
 
     private EntityManagerFactory emf = null;
 
-    public UsuarioJpaController(EntityManagerFactory emf) {
+    public ProductoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
@@ -19,51 +19,20 @@ public class UsuarioJpaController {
         return emf.createEntityManager();
     }
 
-    public boolean login(String correo, String contrasena) {
+    public List<Producto> findProductoEntities() {
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Usuario> query = em.createQuery(
-                "SELECT u FROM Usuario u WHERE u.email = :correo AND u.contrasena = :contrasena", Usuario.class
-            );
-            query.setParameter("correo", correo);
-            query.setParameter("contrasena", contrasena);
-
-            List<Usuario> result = query.getResultList();
-            return !result.isEmpty();
+            return em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
         } finally {
             em.close();
         }
     }
 
-    public List<Usuario> findUsuarioEntities() {
-        EntityManager em = getEntityManager();
-        try {
-            return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    public boolean registrarUsuario(Usuario usuario) {
+    public boolean registrarProducto(Producto producto) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(usuario);
-            em.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            e.printStackTrace();
-            return false;
-        } finally {
-            em.close();
-        }
-    }
-public boolean actualizarUsuario(Usuario usuario) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.merge(usuario);
+            em.persist(producto);
             em.getTransaction().commit();
             return true;
         } catch (Exception e) {
@@ -75,43 +44,48 @@ public boolean actualizarUsuario(Usuario usuario) {
         }
     }
 
-   
-    public boolean eliminarUsuario(Long idusuario) {
+    public Producto findProducto(long idProducto) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Producto.class, idProducto);
+        } finally {
+            em.close();
+        }
+    }
+
+    public boolean actualizarProducto(Producto producto) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            Usuario usuario = em.find(Usuario.class, idusuario);
-            if (usuario != null) {
-                em.remove(usuario);
+            em.merge(producto);
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public boolean eliminarProducto(long idProducto) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Producto producto = em.find(Producto.class, idProducto);
+            if (producto != null) {
+                em.remove(producto);
                 em.getTransaction().commit();
                 return true;
             } else {
+                em.getTransaction().rollback();
                 return false;
             }
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
             e.printStackTrace();
             return false;
-        } finally {
-            em.close();
-        }
-    }
-
-    
-    public Usuario findUsuario(Long idusuario) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Usuario.class, idusuario);
-        } finally {
-            em.close();
-        }
-    }
-
-  
-    public long contarUsuarios() {
-        EntityManager em = getEntityManager();
-        try {
-            return em.createQuery("SELECT COUNT(u) FROM Usuario u", Long.class).getSingleResult();
         } finally {
             em.close();
         }

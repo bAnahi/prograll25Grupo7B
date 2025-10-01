@@ -3,7 +3,8 @@ package com.prograii25.prograii25grupo7b;
 
 
 public class Cliente {
-   
+    
+    
     private long idCliente;
     private String nombre;
     private String correo;
