@@ -1,6 +1,7 @@
 package com.prograii25.prograii25grupo7b.persistencia;
 
 import com.prograii25.prograii25grupo7b.Cliente;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -18,7 +19,6 @@ public class ClienteJpaController {
         return emf.createEntityManager();
     }
 
-    // Crear/Registrar cliente
     public boolean registrarCliente(Cliente cliente) {
         EntityManager em = getEntityManager();
         try {
@@ -35,7 +35,6 @@ public class ClienteJpaController {
         }
     }
 
-    // Obtener todos los clientes
     public List<Cliente> findClienteEntities() {
         EntityManager em = getEntityManager();
         try {
@@ -46,7 +45,15 @@ public class ClienteJpaController {
         }
     }
 
-    // Actualizar cliente
+    public Cliente findCliente(long idCliente) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Cliente.class, idCliente);
+        } finally {
+            em.close();
+        }
+    }
+
     public boolean actualizarCliente(Cliente cliente) {
         EntityManager em = getEntityManager();
         try {
@@ -63,7 +70,6 @@ public class ClienteJpaController {
         }
     }
 
-    // Eliminar cliente
     public boolean eliminarCliente(long idCliente) {
         EntityManager em = getEntityManager();
         try {

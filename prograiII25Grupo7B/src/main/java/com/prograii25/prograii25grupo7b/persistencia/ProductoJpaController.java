@@ -22,7 +22,8 @@ public class ProductoJpaController {
     public List<Producto> findProductoEntities() {
         EntityManager em = getEntityManager();
         try {
-            return em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+            TypedQuery<Producto> query = em.createQuery("SELECT p FROM Producto p", Producto.class);
+            return query.getResultList();
         } finally {
             em.close();
         }
@@ -68,7 +69,7 @@ public class ProductoJpaController {
             em.close();
         }
     }
-    
+
     public boolean eliminarProducto(long idProducto) {
         EntityManager em = getEntityManager();
         try {
@@ -78,10 +79,8 @@ public class ProductoJpaController {
                 em.remove(producto);
                 em.getTransaction().commit();
                 return true;
-            } else {
-                em.getTransaction().rollback();
-                return false;
             }
+            return false;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
             e.printStackTrace();

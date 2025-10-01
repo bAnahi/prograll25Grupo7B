@@ -1,13 +1,28 @@
+package com.prograii25.prograii25grupo7b.db;
 
-package com.prograii25.prograii25grupo7b;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-
+@Entity
+@Table(name = "Producto")
 public class Producto {
-   
+
+    @Id
+    @Column(name = "id_producto")
     private long idProducto;
+
+    @Column(name = "nombre")
     private String nombre;
+
+    @Column(name = "descripcion")
     private String descripcion;
+
+    @Column(name = "precio_unitario")
     private float precioUnitario;
+
+    public Producto() {}
 
     public Producto(long idProducto, String nombre, String descripcion, float precioUnitario) {
         this.idProducto = idProducto;
@@ -16,7 +31,6 @@ public class Producto {
         this.precioUnitario = precioUnitario;
     }
 
-  
     public long getIdProducto() { return idProducto; }
     public void setIdProducto(long idProducto) { this.idProducto = idProducto; }
 
