@@ -1,6 +1,6 @@
 package com.prograii25.prograii25grupo7b.persistencia;
 
-import com.prograii25.prograii25grupo7b.Producto;
+import com.prograii25.prograii25grupo7b.db.Producto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ProductoJpaController {
 
+    // Asegúrate de pasar un EntityManagerFactory válido
     private EntityManagerFactory emf = null;
 
     public ProductoJpaController(EntityManagerFactory emf) {
@@ -19,16 +20,7 @@ public class ProductoJpaController {
         return emf.createEntityManager();
     }
 
-    public List<Producto> findProductoEntities() {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Producto> query = em.createQuery("SELECT p FROM Producto p", Producto.class);
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
+    // Registrar un producto
     public boolean registrarProducto(Producto producto) {
         EntityManager em = getEntityManager();
         try {
@@ -45,6 +37,18 @@ public class ProductoJpaController {
         }
     }
 
+    // Obtener todos los productos
+    public List<Producto> findProductoEntities() {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Producto> query = em.createQuery("SELECT p FROM Producto p", Producto.class);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    // Buscar producto por ID
     public Producto findProducto(long idProducto) {
         EntityManager em = getEntityManager();
         try {
@@ -54,6 +58,7 @@ public class ProductoJpaController {
         }
     }
 
+    // Actualizar producto
     public boolean actualizarProducto(Producto producto) {
         EntityManager em = getEntityManager();
         try {
@@ -70,6 +75,7 @@ public class ProductoJpaController {
         }
     }
 
+    // Eliminar producto por ID
     public boolean eliminarProducto(long idProducto) {
         EntityManager em = getEntityManager();
         try {

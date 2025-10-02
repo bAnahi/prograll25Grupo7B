@@ -9,9 +9,9 @@ public class ConexionSQL {
     
 
     // Datos de conexión
-    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=EmpresaTecnologia;encrypt=false;trustServerCertificate=true";
-    private static final String USER = "sa";
-    private static final String PASSWORD = "DiosEsBueno2024";
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=SistemaEmpresaTecnologia;encrypt=false;trustServerCertificate=true";
+    private static final String USER = "JenniferAL";
+    private static final String PASSWORD = "Admin";
 
     public static Connection getConnection() {
         Connection conn = null;

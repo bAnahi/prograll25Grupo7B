@@ -10,12 +10,12 @@ public class TestConexion {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
             EntityManager em = emf.createEntityManager();
 
-            System.out.println("? Conexión exitosa a la base de datos.");
+            System.out.println(" Conexion exitosa a la base de datos.");
 
             em.close();
             emf.close();
         } catch (Exception e) {
-            System.out.println("? Error de conexión:");
+            System.out.println("? Error de conexion:");
             e.printStackTrace();
         }
     }

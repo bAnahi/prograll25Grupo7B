@@ -24,7 +24,7 @@ public class PrograiII25Grupo7B {
             System.out.print("Correo: ");
             String correo = scanner.nextLine();
 
-            System.out.print("Contraseña: ");
+            System.out.print("ContraseÃ±a: ");
             String contrasena = scanner.nextLine();
 
             loginOk = usuarioJpa.login(correo, contrasena);
@@ -34,14 +34,14 @@ public class PrograiII25Grupo7B {
             }
         }
 
-        // ===== MENÚ PRINCIPAL =====
+        // ===== MENÃš PRINCIPAL =====
         int opcion;
         do {
-            System.out.println("\n===== MENÚ PRINCIPAL =====");
+            System.out.println("\n===== MENÃš PRINCIPAL =====");
             System.out.println("1. Listar usuarios");
             System.out.println("2. Registrar usuario");
             System.out.println("3. Salir");
-            System.out.print("Seleccione una opción: ");
+            System.out.print("Seleccione una opciÃ³n: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
 
@@ -56,7 +56,7 @@ public class PrograiII25Grupo7B {
                     System.out.println("Saliendo...");
                     break;
                 default:
-                    System.out.println("Opción no válida.");
+                    System.out.println("OpciÃ³n no vÃ¡lida.");
             }
         } while (opcion != 3);
 
@@ -86,7 +86,7 @@ public class PrograiII25Grupo7B {
         System.out.print("Correo: ");
         String correo = scanner.nextLine();
 
-        System.out.print("Contraseña: ");
+        System.out.print("ContraseÃ±a: ");
         String contrasena = scanner.nextLine();
 
         System.out.print("Rol: ");

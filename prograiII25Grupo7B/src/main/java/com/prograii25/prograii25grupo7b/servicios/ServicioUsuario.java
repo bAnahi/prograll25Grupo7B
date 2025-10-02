@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class ServicioUsuario {
 
     public boolean login(String correo, String contrasena) {
-        String sql = "SELECT id_usuario, nombre, rol FROM Usuario WHERE correo = ? AND contraseña = ?";
+        String sql = "SELECT id_usuario, nombre, rol FROM Usuario WHERE correo = ? AND contrasena = ?";
 
         try (Connection conn = ConexionSQL.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -29,7 +29,7 @@ public class ServicioUsuario {
                 System.out.println(" Bienvenido " + nombre + " (" + rol + ")");
                 return true;
             } else {
-                System.out.println(" Usuario o contraseña incorrectos");
+                System.out.println(" Usuario o contrasena incorrectos");
                 return false;
             }
 
@@ -40,7 +40,7 @@ public class ServicioUsuario {
     }
 
     public boolean registrarUsuario(Usuario usuario) {
-        String sql = "INSERT INTO Usuario (id_usuario, nombre, correo, contraseña, rol) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuario (id_usuario, nombre, correo, contrasena, rol) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionSQL.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -77,7 +77,7 @@ public class ServicioUsuario {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("? Error registrando bitácora: " + e.getMessage());
+            System.out.println("? Error registrando bitacora: " + e.getMessage());
         }
     }
 }

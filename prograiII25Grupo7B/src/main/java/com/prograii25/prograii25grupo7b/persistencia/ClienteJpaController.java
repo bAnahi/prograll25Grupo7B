@@ -1,6 +1,6 @@
 package com.prograii25.prograii25grupo7b.persistencia;
 
-import com.prograii25.prograii25grupo7b.Cliente;
+import com.prograii25.prograii25grupo7b.db.Cliente;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -89,4 +89,4 @@ public class ClienteJpaController {
             em.close();
         }
     }
-}
+} 
