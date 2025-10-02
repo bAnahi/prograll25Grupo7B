@@ -15,9 +15,9 @@
         
         <properties>
             <!-- Conexión -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1435;databaseName=SistemaEmpresaTecnologia;encrypt=false;trustServerCertificate=true"/>
-            <property name="javax.persistence.jdbc.user" value="JenniferAL"/>
-            <property name="javax.persistence.jdbc.password" value="Admin"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost\\MSSQLSERVER:1433;databaseName=EmpresaTecnologia;trustServerCertificate=true"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value="DiosEsBueno2024"/>
             <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
 
             <!-- Importante: NO modificar tablas existentes -->

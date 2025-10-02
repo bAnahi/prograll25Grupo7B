@@ -16,7 +16,7 @@ public class Usuario {
     @Column(name = "correo")
     private String email;
 
-    @Column(name = "contraseÃ±a") // Ajuste para coincidir
+    @Column(name = "contraseña") // Ajuste para coincidir
     private String contrasena;
 
     private String rol;
@@ -38,3 +38,5 @@ public class Usuario {
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
 }
+
+
