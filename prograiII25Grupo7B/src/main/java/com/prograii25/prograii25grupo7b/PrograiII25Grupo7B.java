@@ -8,6 +8,7 @@ import com.prograii25.prograii25grupo7b.db.Venta;
 import com.prograii25.prograii25grupo7b.persistencia.UsuarioJpaController;
 import com.prograii25.prograii25grupo7b.persistencia.ClienteJpaController;
 import com.prograii25.prograii25grupo7b.persistencia.ProductoJpaController;
+import com.prograii25.prograii25grupo7b.db.Permisos;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -65,6 +66,7 @@ public class PrograiII25Grupo7B {
             System.out.println("13. Actualizar producto");
             System.out.println("14. Eliminar producto");
 
+            System.out.println("15. Registrar venta"); // <-- NUEVA OPCIÓN
             System.out.println("0. Salir");
             System.out.print("Seleccione una opcion: ");
             opcion = scanner.nextInt();
@@ -88,6 +90,9 @@ public class PrograiII25Grupo7B {
                 case 12: registrarProducto(em, scanner); break;
                 case 13: actualizarProducto(em, scanner); break;
                 case 14: eliminarProducto(em, scanner); break;
+
+                // ===== VENTAS =====
+                case 15: registrarVenta(em, scanner, usuarioLogeado); break;
 
                 case 0: System.out.println("Saliendo..."); break;
                 default: System.out.println("Opcion no valida."); break;
@@ -131,7 +136,7 @@ public class PrograiII25Grupo7B {
         nuevo.setRol(rol);
 
         boolean ok = usuarioJpa.registrarUsuario(nuevo);
-        System.out.println(ok ? "Usuario registrado" : "Error al registrar");
+        System.out.println(ok ? "Usuario registrado ✅" : "Error al registrar ❌");
     }
 
     private static void actualizarUsuario(EntityManager em, Scanner scanner) {
@@ -157,7 +162,7 @@ public class PrograiII25Grupo7B {
         String rol = scanner.nextLine(); if (!rol.isEmpty()) usuario.setRol(rol);
 
         boolean ok = usuarioJpa.actualizarUsuario(usuario);
-        System.out.println(ok ? "Usuario actualizado" : "Error al actualizar");
+        System.out.println(ok ? "Usuario actualizado ✅" : "Error al actualizar ❌");
     }
 
     private static void eliminarUsuario(EntityManager em, Scanner scanner) {
@@ -167,7 +172,7 @@ public class PrograiII25Grupo7B {
         long id = scanner.nextLong(); scanner.nextLine();
 
         boolean ok = usuarioJpa.eliminarUsuario(id);
-        System.out.println(ok ? "Usuario eliminado" : "Error al eliminar");
+        System.out.println(ok ? "Usuario eliminado ✅" : "Error al eliminar ❌");
     }
 
     // ==================== MÉTODOS CLIENTE ====================
@@ -206,7 +211,7 @@ public class PrograiII25Grupo7B {
         System.out.print("Nueva direccion (" + cliente.getDireccion() + "): "); String direccion = scanner.nextLine(); if (!direccion.isEmpty()) cliente.setDireccion(direccion);
 
         boolean ok = clienteJpa.actualizarCliente(cliente);
-        System.out.println(ok ? "Cliente actualizado" : "Error al actualizar");
+        System.out.println(ok ? "Cliente actualizado ✅" : "Error al actualizar ❌");
     }
 
     private static void eliminarCliente(EntityManager em, Scanner scanner) {
@@ -214,7 +219,7 @@ public class PrograiII25Grupo7B {
 
         System.out.print("Ingrese ID del cliente a eliminar: "); long id = scanner.nextLong(); scanner.nextLine();
         boolean ok = clienteJpa.eliminarCliente(id);
-        System.out.println(ok ? "Cliente eliminado" : "Error al eliminar");
+        System.out.println(ok ? "Cliente eliminado ✅" : "Error al eliminar ❌");
     }
 
     // ==================== MÉTODOS PRODUCTO ====================
@@ -236,7 +241,7 @@ public class PrograiII25Grupo7B {
 
         Producto nuevo = new Producto(idProducto, nombre, descripcion, precio);
         boolean ok = productoJpa.registrarProducto(nuevo);
-        System.out.println(ok ? "Producto registrado" : "Error al registrar");
+        System.out.println(ok ? "Producto registrado ✅" : "Error al registrar ❌");
     }
 
     private static void actualizarProducto(EntityManager em, Scanner scanner) {
@@ -260,5 +265,91 @@ public class PrograiII25Grupo7B {
         System.out.print("Ingrese ID del producto a eliminar: "); long id = scanner.nextLong(); scanner.nextLine();
         boolean ok = productoJpa.eliminarProducto(id);
         System.out.println(ok ? "Producto eliminado ✅" : "Error al eliminar ❌");
+    }
+
+    // ==================== MÉTODO VENTA ====================
+    private static void registrarVenta(EntityManager em, Scanner scanner, Usuario usuarioLogeado) {
+        try {
+            System.out.print("Ingrese ID del cliente: ");
+            long idCliente = scanner.nextLong();
+            scanner.nextLine();
+
+            Cliente cliente = em.find(Cliente.class, idCliente);
+            if (cliente == null) {
+                System.out.println("Cliente no encontrado ❌");
+                return;
+            }
+
+            long idVenta = System.currentTimeMillis(); // Generar ID único
+            java.util.Date fecha = new java.util.Date();
+            double totalVenta = 0.0;
+
+            Venta venta = new Venta();
+            venta.setIdVenta(idVenta);
+            venta.setIdCliente(cliente.getIdCliente());
+            venta.setIdUsuario(usuarioLogeado.getIdusuario());
+            venta.setFecha(fecha);
+            venta.setTotal(totalVenta);
+
+            List<DetalleFactura> detalles = new java.util.ArrayList<>();
+            boolean agregarMas = true;
+
+            while (agregarMas) {
+                List<Producto> productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+                System.out.println("\n===== Lista de Productos =====");
+                for (Producto p : productos) {
+                    System.out.println(p.getIdProducto() + " | " + p.getNombre() + " | Q" + p.getPrecioUnitario());
+                }
+
+                System.out.print("Ingrese ID del producto: ");
+                long idProducto = scanner.nextLong();
+                scanner.nextLine();
+
+                Producto producto = em.find(Producto.class, idProducto);
+                if (producto == null) {
+                    System.out.println("Producto no encontrado ❌");
+                    continue;
+                }
+
+                System.out.print("Ingrese cantidad: ");
+                int cantidad = scanner.nextInt();
+                scanner.nextLine();
+
+                float subtotal = cantidad * producto.getPrecioUnitario();
+                totalVenta += subtotal;
+
+                long idDetalle = System.currentTimeMillis();
+                DetalleFactura detalle = new DetalleFactura();
+                detalle.setIdDetalle(idDetalle);
+                detalle.setVenta(venta);
+                detalle.setIdProducto(idProducto);
+                detalle.setCantidad(cantidad);
+                detalle.setSubtotal(subtotal);
+
+                detalles.add(detalle);
+
+                System.out.print("¿Desea agregar otro producto? (S/N): ");
+                String resp = scanner.nextLine();
+                if (!resp.equalsIgnoreCase("S")) {
+                    agregarMas = false;
+                }
+            }
+
+            venta.setTotal(totalVenta);
+
+            em.getTransaction().begin();
+            em.persist(venta);
+            for (DetalleFactura det : detalles) {
+                em.persist(det);
+            }
+            em.getTransaction().commit();
+
+            System.out.println("Venta registrada ✅ Total: Q" + totalVenta);
+
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            e.printStackTrace();
+            System.out.println("Error al registrar la venta ❌");
+        }
     }
 }
