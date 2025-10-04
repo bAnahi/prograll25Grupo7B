@@ -1,8 +1,11 @@
-/*package com.prograii25.prograii25grupo7b;
+package com.prograii25.prograii25grupo7b;
 
 import com.prograii25.prograii25grupo7b.db.Cliente;
 import com.prograii25.prograii25grupo7b.db.Producto;
 import com.prograii25.prograii25grupo7b.db.Usuario;
+import com.prograii25.prograii25grupo7b.db.Venta;
+import com.prograii25.prograii25grupo7b.db.Factura;
+import com.prograii25.prograii25grupo7b.db.DetalleFactura;
 import com.prograii25.prograii25grupo7b.Rol;
 
 import java.util.Date;
@@ -25,7 +28,7 @@ public class VentaService {
         this.inventario = inventario;
     }
 
-    public boolean registrarVenta(Venta venta, List<DetalleVenta> detalles) {
+    public boolean registrarVenta(Venta venta, List<DetalleFactura> detalles) {
 
         // Validar cliente
         Cliente cliente = clientes.stream()
@@ -43,7 +46,7 @@ public class VentaService {
                 .findFirst()
                 .orElse(null);
         if (usuario == null || usuario.getRolEnum() == null) {
-            System.out.println("Usuario no válido.");
+            System.out.println("Usuario no valido.");
             return false;
         }
         Rol rolUsuario = usuario.getRolEnum();
@@ -53,7 +56,7 @@ public class VentaService {
         }
 
         // Validar productos y stock
-        for (DetalleVenta detalle : detalles) {
+        for (DetalleFactura detalle : detalles) {
             Producto producto = productos.stream()
                     .filter(p -> p.getIdProducto() == detalle.getIdProducto())
                     .findFirst()
@@ -75,7 +78,7 @@ public class VentaService {
 
         // Calcular total
         double totalVenta = 0;
-        for (DetalleVenta detalle : detalles) {
+        for (DetalleFactura detalle : detalles) {
             detalle.setSubtotal(detalle.getCantidad() * detalle.getPrecioUnitario());
             totalVenta += detalle.getSubtotal();
         }
@@ -83,7 +86,7 @@ public class VentaService {
         venta.setFecha(new Date());
 
         // Reducir stock
-        for (DetalleVenta detalle : detalles) {
+        for (DetalleFactura detalle : detalles) {
             Inventario inv = inventario.stream()
                     .filter(i -> i.getIdProducto() == detalle.getIdProducto())
                     .findFirst()
@@ -100,10 +103,9 @@ public class VentaService {
                 totalVenta
         );
 
-        System.out.println("Venta registrada con éxito. Total: Q" + totalVenta);
+        System.out.println("Venta registrada con exito. Total: Q" + totalVenta);
         System.out.println("Factura generada: " + factura.getNumeroFactura());
 
         return true;
     }
 }
-*\

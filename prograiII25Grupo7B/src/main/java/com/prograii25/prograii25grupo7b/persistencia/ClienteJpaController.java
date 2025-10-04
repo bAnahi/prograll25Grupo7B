@@ -1,10 +1,8 @@
 package com.prograii25.prograii25grupo7b.persistencia;
 
 import com.prograii25.prograii25grupo7b.db.Cliente;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class ClienteJpaController {
@@ -19,6 +17,24 @@ public class ClienteJpaController {
         return emf.createEntityManager();
     }
 
+    public List<Cliente> findClienteEntities() {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public Cliente findCliente(long id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Cliente.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
     public boolean registrarCliente(Cliente cliente) {
         EntityManager em = getEntityManager();
         try {
@@ -30,25 +46,6 @@ public class ClienteJpaController {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
             e.printStackTrace();
             return false;
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<Cliente> findClienteEntities() {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Cliente c", Cliente.class);
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    public Cliente findCliente(long idCliente) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Cliente.class, idCliente);
         } finally {
             em.close();
         }
@@ -70,17 +67,15 @@ public class ClienteJpaController {
         }
     }
 
-    public boolean eliminarCliente(long idCliente) {
+    public boolean eliminarCliente(long id) {
         EntityManager em = getEntityManager();
         try {
+            Cliente cliente = em.find(Cliente.class, id);
+            if (cliente == null) return false;
             em.getTransaction().begin();
-            Cliente cliente = em.find(Cliente.class, idCliente);
-            if (cliente != null) {
-                em.remove(cliente);
-                em.getTransaction().commit();
-                return true;
-            }
-            return false;
+            em.remove(cliente);
+            em.getTransaction().commit();
+            return true;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
             e.printStackTrace();
@@ -89,4 +84,4 @@ public class ClienteJpaController {
             em.close();
         }
     }
-} 
+}

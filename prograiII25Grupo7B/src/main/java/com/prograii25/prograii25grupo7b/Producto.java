@@ -41,7 +41,3 @@ public class Producto {
     public float getPrecioUnitario() { return precioUnitario; }
     public void setPrecioUnitario(float precioUnitario) { this.precioUnitario = precioUnitario; }
 }
-
-
-    
-

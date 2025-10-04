@@ -39,4 +39,3 @@ public class UsuarioService {
                 .orElse(null);
     }
 }
-

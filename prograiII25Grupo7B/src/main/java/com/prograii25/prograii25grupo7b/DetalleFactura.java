@@ -44,5 +44,5 @@ public class DetalleFactura {
     public void setSubtotal(float subtotal) { this.subtotal = subtotal; }
 }
 
-    
+
 

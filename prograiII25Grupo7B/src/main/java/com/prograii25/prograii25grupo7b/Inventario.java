@@ -1,4 +1,3 @@
-
 package com.prograii25.prograii25grupo7b;
 
 
@@ -24,4 +23,5 @@ public class Inventario {
     public int getCantidadDisponible() { return cantidadDisponible; }
     public void setCantidadDisponible(int cantidadDisponible) { this.cantidadDisponible = cantidadDisponible; }
 }
+
 

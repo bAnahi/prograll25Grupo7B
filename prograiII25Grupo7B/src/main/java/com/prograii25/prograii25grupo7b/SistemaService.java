@@ -1,7 +1,8 @@
-/*
 package com.prograii25.prograii25grupo7b;
 
 import com.prograii25.prograii25grupo7b.db.Usuario;
+import com.prograii25.prograii25grupo7b.db.Venta;
+import com.prograii25.prograii25grupo7b.db.DetalleFactura;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class SistemaService {
         this.inventarioService = inventarioService;
     }
 
-    // Métodos de Usuario
+    // MÃ©todos de Usuario
     public boolean registrarUsuario(Usuario usuario) {
         return usuarioService.registrarUsuarioConValidacion(usuario);
     }
@@ -30,7 +31,7 @@ public class SistemaService {
         return usuarioService.buscarUsuarioPorCorreo(correo);
     }
 
-    // Métodos de Inventario
+    // MÃ©todos de Inventario
     public boolean agregarStock(long idProducto, int cantidad) {
         return inventarioService.agregarStock(idProducto, cantidad);
     }
@@ -43,10 +44,8 @@ public class SistemaService {
         return inventarioService.consultarStock(idProducto);
     }
 
-    // Métodos de Venta
-    public boolean registrarVenta(Venta venta, List<DetalleVenta> detalles) {
+    // MÃ©todos de Venta
+    public boolean registrarVenta(Venta venta, List<DetalleFactura> detalles) {
         return ventaService.registrarVenta(venta, detalles);
     }
 }
-
-*\

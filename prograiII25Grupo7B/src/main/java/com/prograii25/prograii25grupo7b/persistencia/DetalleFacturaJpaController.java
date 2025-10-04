@@ -1,4 +1,3 @@
-
 package com.prograii25.prograii25grupo7b.persistencia;
 
 import com.prograii25.prograii25grupo7b.db.DetalleFactura;

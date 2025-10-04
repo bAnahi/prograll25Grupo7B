@@ -18,7 +18,7 @@ public class Usuario {
     @Column(name = "correo")
     private String email;
 
-    @Column(name = "contraseña")
+    @Column(name = "contraseÃ±a")
     private String contrasena;
 
     @Column(name = "rol")
@@ -40,7 +40,7 @@ public class Usuario {
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
 
-    // Método para obtener enum
+    // MÃ©todo para obtener enum
     public Rol getRolEnum() {
         return Rol.fromString(this.rol);
     }
