@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProductoJpaController {
 
-    // Asegúrate de pasar un EntityManagerFactory válido
+    
     private EntityManagerFactory emf = null;
 
     public ProductoJpaController(EntityManagerFactory emf) {

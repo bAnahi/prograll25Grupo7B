@@ -1,9 +1,6 @@
 package com.prograii25.prograii25grupo7b.db;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Cliente")
@@ -35,6 +32,7 @@ public class Cliente {
         this.direccion = direccion;
     }
 
+    // Getters y setters
     public long getIdCliente() { return idCliente; }
     public void setIdCliente(long idCliente) { this.idCliente = idCliente; }
 
@@ -50,6 +48,7 @@ public class Cliente {
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
 }
+
 
 
     
