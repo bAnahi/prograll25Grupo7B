@@ -6,8 +6,6 @@ import com.prograii25.prograii25grupo7b.db.Producto;
 import com.prograii25.prograii25grupo7b.db.DetalleFactura;
 import com.prograii25.prograii25grupo7b.db.Venta;
 import com.prograii25.prograii25grupo7b.persistencia.UsuarioJpaController;
-import com.prograii25.prograii25grupo7b.persistencia.ClienteJpaController;
-import com.prograii25.prograii25grupo7b.persistencia.ProductoJpaController;
 import com.prograii25.prograii25grupo7b.db.Permisos;
 
 import javax.persistence.EntityManager;
@@ -47,55 +45,113 @@ public class PrograiII25Grupo7B {
             }
         }
 
-        // ===== MENÚ PRINCIPAL =====
+        Rol rolUsuario = usuarioLogeado.getRolEnum();
+
+        // ===== MENU PRINCIPAL =====
         int opcion;
         do {
             System.out.println("\n===== MENU PRINCIPAL =====");
-            System.out.println("1. Listar usuarios");
-            System.out.println("2. Registrar usuario");
-            System.out.println("3. Actualizar usuario");
-            System.out.println("4. Eliminar usuario");
 
-            System.out.println("6. Listar clientes");
-            System.out.println("7. Registrar cliente");
-            System.out.println("8. Actualizar cliente");
-            System.out.println("9. Eliminar cliente");
+            // ---- USUARIOS ----
+            if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_USUARIOS")) {
+                System.out.println("1. Listar usuarios");
+                System.out.println("2. Registrar usuario");
+                System.out.println("3. Editar usuario");
+                System.out.println("4. Eliminar usuario");
+            }
 
-            System.out.println("11. Listar productos");
-            System.out.println("12. Registrar producto");
-            System.out.println("13. Actualizar producto");
-            System.out.println("14. Eliminar producto");
+            // ---- CLIENTES ----
+            if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_CLIENTES")) {
+                System.out.println("5. Listar clientes");
+                System.out.println("6. Registrar cliente");
+                System.out.println("7. Editar cliente");
+                System.out.println("8. Eliminar cliente");
+            }
 
-            System.out.println("15. Registrar venta"); // <-- NUEVA OPCIÓN
+            // ---- PRODUCTOS ----
+            if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_PRODUCTOS")) {
+                System.out.println("9. Listar productos");
+                System.out.println("10. Registrar producto");
+                System.out.println("11. Editar producto");
+                System.out.println("12. Eliminar producto");
+            }
+
+            // ---- VENTAS ----
+            if (Permisos.tienePermiso(rolUsuario, "REGISTRAR_VENTA")) {
+                System.out.println("13. Registrar venta");
+            }
+
             System.out.println("0. Salir");
-            System.out.print("Seleccione una opcion: ");
+            System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
 
             switch (opcion) {
-                // ===== CRUD USUARIO =====
-                case 1: listarUsuarios(em); break;
-                case 2: registrarUsuario(em, scanner); break;
-                case 3: actualizarUsuario(em, scanner); break;
-                case 4: eliminarUsuario(em, scanner); break;
+                // ---- USUARIOS ----
+                case 1:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_USUARIOS")) listarUsuarios(em);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
+                case 2:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_USUARIOS")) registrarUsuario(em, scanner);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
+                case 4:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_USUARIOS")) editarUsuario(em, scanner);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
+                case 5:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_USUARIOS")) eliminarUsuario(em, scanner);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
 
-                // ===== CRUD CLIENTE =====
-                case 6: listarClientes(em); break;
-                case 7: registrarCliente(em, scanner); break;
-                case 8: actualizarCliente(em, scanner); break;
-                case 9: eliminarCliente(em, scanner); break;
+                // ---- CLIENTES ----
+                case 6:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_CLIENTES")) listarClientes(em);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
+                case 7:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_CLIENTES")) registrarCliente(em, scanner);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
+                case 8:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_CLIENTES")) editarCliente(em, scanner);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
+                case 9:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_CLIENTES")) eliminarCliente(em, scanner);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
 
-                // ===== CRUD PRODUCTO =====
-                case 11: listarProductos(em); break;
-                case 12: registrarProducto(em, scanner); break;
-                case 13: actualizarProducto(em, scanner); break;
-                case 14: eliminarProducto(em, scanner); break;
+                // ---- PRODUCTOS ----
+                case 10:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_PRODUCTOS")) listarProductos(em);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
+                case 11:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_PRODUCTOS")) registrarProducto(em, scanner);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
+                case 12:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_PRODUCTOS")) editarProducto(em, scanner);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
+                case 13:
+                    if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_PRODUCTOS")) eliminarProducto(em, scanner);
+                    else System.out.println("No tiene permiso para esta acción.");
+                    break;
 
-                // ===== VENTAS =====
-                case 15: registrarVenta(em, scanner, usuarioLogeado); break;
+                // ---- VENTAS ----
+                case 3:
+                    if (Permisos.tienePermiso(rolUsuario, "REGISTRAR_VENTA")) registrarVenta(em, scanner, usuarioLogeado);
+                    else System.out.println("No tiene permiso para esta accion.");
+                    break;
 
-                case 0: System.out.println("Saliendo..."); break;
-                default: System.out.println("Opcion no valida."); break;
+                case 0:
+                    System.out.println("Saliendo...");
+                    break;
+                default:
+                    System.out.println("Opción no valida.");
             }
 
         } while (opcion != 0);
@@ -105,7 +161,7 @@ public class PrograiII25Grupo7B {
         scanner.close();
     }
 
-    // ==================== MÉTODOS USUARIO ====================
+    // ==================== METODOS USUARIOS ====================
     private static void listarUsuarios(EntityManager em) {
         UsuarioJpaController usuarioJpa = new UsuarioJpaController(em.getEntityManagerFactory());
         System.out.println("\n===== Lista de Usuarios =====");
@@ -118,14 +174,19 @@ public class PrograiII25Grupo7B {
         UsuarioJpaController usuarioJpa = new UsuarioJpaController(em.getEntityManagerFactory());
 
         System.out.print("ID usuario: ");
-        long idUsuario = scanner.nextLong(); scanner.nextLine();
+        long idUsuario = scanner.nextLong();
+        scanner.nextLine();
+
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
+
         System.out.print("Correo: ");
         String correo = scanner.nextLine();
+
         System.out.print("Contrasena: ");
         String contrasena = scanner.nextLine();
-        System.out.print("Rol: ");
+
+        System.out.print("Rol (ADMINISTRADOR, VENDEDOR, etc): ");
         String rol = scanner.nextLine();
 
         Usuario nuevo = new Usuario();
@@ -136,138 +197,212 @@ public class PrograiII25Grupo7B {
         nuevo.setRol(rol);
 
         boolean ok = usuarioJpa.registrarUsuario(nuevo);
-        System.out.println(ok ? "Usuario registrado ✅" : "Error al registrar ❌");
+        System.out.println(ok ? "Usuario registrado" : "Error al registrar");
     }
 
-    private static void actualizarUsuario(EntityManager em, Scanner scanner) {
-        UsuarioJpaController usuarioJpa = new UsuarioJpaController(em.getEntityManagerFactory());
+    private static void editarUsuario(EntityManager em, Scanner scanner) {
+        System.out.print("Ingrese ID del usuario a editar: ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
 
-        System.out.print("Ingrese ID del usuario a actualizar: ");
-        long id = scanner.nextLong(); scanner.nextLine();
+        Usuario u = em.find(Usuario.class, id);
+        if (u == null) {
+            System.out.println("Usuario no encontrado");
+            return;
+        }
 
-        Usuario usuario = usuarioJpa.findUsuarioEntities().stream()
-                .filter(u -> u.getIdusuario() == id)
-                .findFirst()
-                .orElse(null);
+        System.out.print("Nuevo nombre (" + u.getNombre() + "): ");
+        String nombre = scanner.nextLine();
+        if (!nombre.isEmpty()) u.setNombre(nombre);
 
-        if (usuario == null) { System.out.println("Usuario no encontrado."); return; }
+        System.out.print("Nuevo correo (" + u.getEmail() + "): ");
+        String email = scanner.nextLine();
+        if (!email.isEmpty()) u.setEmail(email);
 
-        System.out.print("Nuevo nombre (" + usuario.getNombre() + "): ");
-        String nombre = scanner.nextLine(); if (!nombre.isEmpty()) usuario.setNombre(nombre);
-        System.out.print("Nuevo correo (" + usuario.getEmail() + "): ");
-        String correo = scanner.nextLine(); if (!correo.isEmpty()) usuario.setEmail(correo);
         System.out.print("Nueva contrasena: ");
-        String contrasena = scanner.nextLine(); if (!contrasena.isEmpty()) usuario.setContrasena(contrasena);
-        System.out.print("Nuevo rol (" + usuario.getRol() + "): ");
-        String rol = scanner.nextLine(); if (!rol.isEmpty()) usuario.setRol(rol);
+        String pass = scanner.nextLine();
+        if (!pass.isEmpty()) u.setContrasena(pass);
 
-        boolean ok = usuarioJpa.actualizarUsuario(usuario);
-        System.out.println(ok ? "Usuario actualizado ✅" : "Error al actualizar ❌");
+        System.out.print("Nuevo rol (" + u.getRol() + "): ");
+        String rol = scanner.nextLine();
+        if (!rol.isEmpty()) u.setRol(rol);
+
+        em.getTransaction().begin();
+        em.merge(u);
+        em.getTransaction().commit();
+
+        System.out.println("Usuario actualizado ?");
     }
 
     private static void eliminarUsuario(EntityManager em, Scanner scanner) {
-        UsuarioJpaController usuarioJpa = new UsuarioJpaController(em.getEntityManagerFactory());
-
         System.out.print("Ingrese ID del usuario a eliminar: ");
-        long id = scanner.nextLong(); scanner.nextLine();
+        long id = scanner.nextLong();
+        scanner.nextLine();
 
-        boolean ok = usuarioJpa.eliminarUsuario(id);
-        System.out.println(ok ? "Usuario eliminado ✅" : "Error al eliminar ❌");
+        Usuario u = em.find(Usuario.class, id);
+        if (u == null) {
+            System.out.println("Usuario no encontrado ?");
+            return;
+        }
+
+        em.getTransaction().begin();
+        em.remove(u);
+        em.getTransaction().commit();
+        System.out.println("Usuario eliminado ?");
     }
 
-    // ==================== MÉTODOS CLIENTE ====================
+    // ==================== METODOS CLIENTES ====================
     private static void listarClientes(EntityManager em) {
-        ClienteJpaController clienteJpa = new ClienteJpaController(em.getEntityManagerFactory());
+        List<Cliente> clientes = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
         System.out.println("\n===== Lista de Clientes =====");
-        clienteJpa.findClienteEntities().forEach(c ->
-                System.out.println(c.getIdCliente() + " | " + c.getNombre() + " | " + c.getCorreo() + " | " + c.getTelefono() + " | " + c.getDireccion())
-        );
+        for (Cliente c : clientes) {
+            System.out.println(c.getIdCliente() + " | " + c.getNombre() + " | " + c.getTelefono());
+        }
     }
 
     private static void registrarCliente(EntityManager em, Scanner scanner) {
-        ClienteJpaController clienteJpa = new ClienteJpaController(em.getEntityManagerFactory());
+        System.out.print("ID Cliente: ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
 
-        System.out.print("ID cliente: "); long idCliente = scanner.nextLong(); scanner.nextLine();
-        System.out.print("Nombre: "); String nombre = scanner.nextLine();
-        System.out.print("Correo: "); String correo = scanner.nextLine();
-        System.out.print("Telefono: "); String telefono = scanner.nextLine();
-        System.out.print("Direccion: "); String direccion = scanner.nextLine();
+        System.out.print("Nombre: ");
+        String nombre = scanner.nextLine();
 
-        Cliente nuevo = new Cliente(idCliente, nombre, correo, telefono, direccion);
-        boolean ok = clienteJpa.registrarCliente(nuevo);
-        System.out.println(ok ? "Cliente registrado ✅" : "Error al registrar ❌");
+        System.out.print("Telefono: ");
+        String tel = scanner.nextLine();
+
+        Cliente c = new Cliente();
+        c.setIdCliente(id);
+        c.setNombre(nombre);
+        c.setTelefono(tel);
+
+        em.getTransaction().begin();
+        em.persist(c);
+        em.getTransaction().commit();
+
+        System.out.println("Cliente registrado ?");
     }
 
-    private static void actualizarCliente(EntityManager em, Scanner scanner) {
-        ClienteJpaController clienteJpa = new ClienteJpaController(em.getEntityManagerFactory());
+    private static void editarCliente(EntityManager em, Scanner scanner) {
+        System.out.print("Ingrese ID del cliente a editar: ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
 
-        System.out.print("Ingrese ID del cliente a actualizar: "); long id = scanner.nextLong(); scanner.nextLine();
-        Cliente cliente = clienteJpa.findCliente(id);
-        if (cliente == null) { System.out.println("Cliente no encontrado."); return; }
+        Cliente c = em.find(Cliente.class, id);
+        if (c == null) {
+            System.out.println("Cliente no encontrado ?");
+            return;
+        }
 
-        System.out.print("Nuevo nombre (" + cliente.getNombre() + "): "); String nombre = scanner.nextLine(); if (!nombre.isEmpty()) cliente.setNombre(nombre);
-        System.out.print("Nuevo correo (" + cliente.getCorreo() + "): "); String correo = scanner.nextLine(); if (!correo.isEmpty()) cliente.setCorreo(correo);
-        System.out.print("Nuevo telefono (" + cliente.getTelefono() + "): "); String telefono = scanner.nextLine(); if (!telefono.isEmpty()) cliente.setTelefono(telefono);
-        System.out.print("Nueva direccion (" + cliente.getDireccion() + "): "); String direccion = scanner.nextLine(); if (!direccion.isEmpty()) cliente.setDireccion(direccion);
+        System.out.print("Nuevo nombre (" + c.getNombre() + "): ");
+        String nombre = scanner.nextLine();
+        if (!nombre.isEmpty()) c.setNombre(nombre);
 
-        boolean ok = clienteJpa.actualizarCliente(cliente);
-        System.out.println(ok ? "Cliente actualizado ✅" : "Error al actualizar ❌");
+        System.out.print("Nuevo telefono (" + c.getTelefono() + "): ");
+        String tel = scanner.nextLine();
+        if (!tel.isEmpty()) c.setTelefono(tel);
+
+        em.getTransaction().begin();
+        em.merge(c);
+        em.getTransaction().commit();
+
+        System.out.println("Cliente actualizado ?");
     }
 
     private static void eliminarCliente(EntityManager em, Scanner scanner) {
-        ClienteJpaController clienteJpa = new ClienteJpaController(em.getEntityManagerFactory());
+        System.out.print("Ingrese ID del cliente a eliminar: ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
 
-        System.out.print("Ingrese ID del cliente a eliminar: "); long id = scanner.nextLong(); scanner.nextLine();
-        boolean ok = clienteJpa.eliminarCliente(id);
-        System.out.println(ok ? "Cliente eliminado ✅" : "Error al eliminar ❌");
+        Cliente c = em.find(Cliente.class, id);
+        if (c == null) {
+            System.out.println("Cliente no encontrado ?");
+            return;
+        }
+
+        em.getTransaction().begin();
+        em.remove(c);
+        em.getTransaction().commit();
+        System.out.println("Cliente eliminado ?");
     }
 
-    // ==================== MÉTODOS PRODUCTO ====================
+    // ==================== METODOS PRODUCTOS ====================
     private static void listarProductos(EntityManager em) {
-        ProductoJpaController productoJpa = new ProductoJpaController(em.getEntityManagerFactory());
+        List<Producto> productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
         System.out.println("\n===== Lista de Productos =====");
-        productoJpa.findProductoEntities().forEach(p ->
-                System.out.println(p.getIdProducto() + " | " + p.getNombre() + " | " + p.getDescripcion() + " | Q" + p.getPrecioUnitario())
-        );
+        for (Producto p : productos) {
+            System.out.println(p.getIdProducto() + " | " + p.getNombre() + " | Q" + p.getPrecioUnitario());
+        }
     }
 
     private static void registrarProducto(EntityManager em, Scanner scanner) {
-        ProductoJpaController productoJpa = new ProductoJpaController(em.getEntityManagerFactory());
+        System.out.print("ID Producto: ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
 
-        System.out.print("ID producto: "); long idProducto = scanner.nextLong(); scanner.nextLine();
-        System.out.print("Nombre: "); String nombre = scanner.nextLine();
-        System.out.print("Descripción: "); String descripcion = scanner.nextLine();
-        System.out.print("Precio unitario: "); float precio = scanner.nextFloat(); scanner.nextLine();
+        System.out.print("Nombre: ");
+        String nombre = scanner.nextLine();
 
-        Producto nuevo = new Producto(idProducto, nombre, descripcion, precio);
-        boolean ok = productoJpa.registrarProducto(nuevo);
-        System.out.println(ok ? "Producto registrado ✅" : "Error al registrar ❌");
+        System.out.print("Precio unitario: ");
+        float precio = scanner.nextFloat();
+        scanner.nextLine();
+
+        Producto p = new Producto();
+        p.setIdProducto(id);
+        p.setNombre(nombre);
+        p.setPrecioUnitario(precio);
+
+        em.getTransaction().begin();
+        em.persist(p);
+        em.getTransaction().commit();
+
+        System.out.println("Producto registrado ?");
     }
 
-    private static void actualizarProducto(EntityManager em, Scanner scanner) {
-        ProductoJpaController productoJpa = new ProductoJpaController(em.getEntityManagerFactory());
+    private static void editarProducto(EntityManager em, Scanner scanner) {
+        System.out.print("Ingrese ID del producto a editar: ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
 
-        System.out.print("Ingrese ID del producto a actualizar: "); long id = scanner.nextLong(); scanner.nextLine();
-        Producto producto = productoJpa.findProducto(id);
-        if (producto == null) { System.out.println("Producto no encontrado."); return; }
+        Producto p = em.find(Producto.class, id);
+        if (p == null) {
+            System.out.println("Producto no encontrado ?");
+            return;
+        }
 
-        System.out.print("Nuevo nombre (" + producto.getNombre() + "): "); String nombre = scanner.nextLine(); if (!nombre.isEmpty()) producto.setNombre(nombre);
-        System.out.print("Nueva descripcion (" + producto.getDescripcion() + "): "); String descripcion = scanner.nextLine(); if (!descripcion.isEmpty()) producto.setDescripcion(descripcion);
-        System.out.print("Nuevo precio unitario (" + producto.getPrecioUnitario() + "): "); String precioStr = scanner.nextLine(); if (!precioStr.isEmpty()) producto.setPrecioUnitario(Float.parseFloat(precioStr));
+        System.out.print("Nuevo nombre (" + p.getNombre() + "): ");
+        String nombre = scanner.nextLine();
+        if (!nombre.isEmpty()) p.setNombre(nombre);
 
-        boolean ok = productoJpa.actualizarProducto(producto);
-        System.out.println(ok ? "Producto actualizado ✅" : "Error al actualizar ❌");
+        System.out.print("Nuevo precio (" + p.getPrecioUnitario() + "): ");
+        String precioStr = scanner.nextLine();
+        if (!precioStr.isEmpty()) p.setPrecioUnitario(Float.parseFloat(precioStr));
+
+        em.getTransaction().begin();
+        em.merge(p);
+        em.getTransaction().commit();
+
+        System.out.println("Producto actualizado ?");
     }
 
     private static void eliminarProducto(EntityManager em, Scanner scanner) {
-        ProductoJpaController productoJpa = new ProductoJpaController(em.getEntityManagerFactory());
+        System.out.print("Ingrese ID del producto a eliminar: ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
 
-        System.out.print("Ingrese ID del producto a eliminar: "); long id = scanner.nextLong(); scanner.nextLine();
-        boolean ok = productoJpa.eliminarProducto(id);
-        System.out.println(ok ? "Producto eliminado ✅" : "Error al eliminar ❌");
+        Producto p = em.find(Producto.class, id);
+        if (p == null) {
+            System.out.println("Producto no encontrado ?");
+            return;
+        }
+
+        em.getTransaction().begin();
+        em.remove(p);
+        em.getTransaction().commit();
+        System.out.println("Producto eliminado ?");
     }
 
-    // ==================== MÉTODO VENTA ====================
+    // -------------------- VENTAS --------------------
     private static void registrarVenta(EntityManager em, Scanner scanner, Usuario usuarioLogeado) {
         try {
             System.out.print("Ingrese ID del cliente: ");
@@ -276,20 +411,15 @@ public class PrograiII25Grupo7B {
 
             Cliente cliente = em.find(Cliente.class, idCliente);
             if (cliente == null) {
-                System.out.println("Cliente no encontrado ❌");
+                System.out.println("Cliente no encontrado ?");
                 return;
             }
 
-            long idVenta = System.currentTimeMillis(); // Generar ID único
+            long idVenta = System.currentTimeMillis();
             java.util.Date fecha = new java.util.Date();
             double totalVenta = 0.0;
 
-            Venta venta = new Venta();
-            venta.setIdVenta(idVenta);
-            venta.setIdCliente(cliente.getIdCliente());
-            venta.setIdUsuario(usuarioLogeado.getIdusuario());
-            venta.setFecha(fecha);
-            venta.setTotal(totalVenta);
+            Venta venta = new Venta(idVenta, cliente.getIdCliente(), usuarioLogeado.getIdusuario(), fecha, totalVenta);
 
             List<DetalleFactura> detalles = new java.util.ArrayList<>();
             boolean agregarMas = true;
@@ -307,7 +437,7 @@ public class PrograiII25Grupo7B {
 
                 Producto producto = em.find(Producto.class, idProducto);
                 if (producto == null) {
-                    System.out.println("Producto no encontrado ❌");
+                    System.out.println("Producto no encontrado ?");
                     continue;
                 }
 
@@ -330,26 +460,20 @@ public class PrograiII25Grupo7B {
 
                 System.out.print("¿Desea agregar otro producto? (S/N): ");
                 String resp = scanner.nextLine();
-                if (!resp.equalsIgnoreCase("S")) {
-                    agregarMas = false;
-                }
+                if (!resp.equalsIgnoreCase("S")) agregarMas = false;
             }
-
-            venta.setTotal(totalVenta);
 
             em.getTransaction().begin();
             em.persist(venta);
-            for (DetalleFactura det : detalles) {
-                em.persist(det);
-            }
+            for (DetalleFactura det : detalles) em.persist(det);
             em.getTransaction().commit();
 
-            System.out.println("Venta registrada ✅ Total: Q" + totalVenta);
+            System.out.println("Venta registrada ? Total: Q" + totalVenta);
 
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
             e.printStackTrace();
-            System.out.println("Error al registrar la venta ❌");
+            System.out.println("Error al registrar la venta ?");
         }
     }
 }
