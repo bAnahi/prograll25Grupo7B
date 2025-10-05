@@ -423,7 +423,7 @@ private static void registrarVenta(EntityManager em, Scanner scanner, Usuario us
         java.util.Date fecha = new java.util.Date();
         double totalVenta = 0.0;
 
-        // Crear la venta
+        
         Venta venta = new Venta(idVenta, cliente.getIdCliente(), usuarioLogeado.getIdusuario(), fecha, totalVenta);
 
         List<DetalleFactura> detalles = new java.util.ArrayList<>();
@@ -442,7 +442,7 @@ private static void registrarVenta(EntityManager em, Scanner scanner, Usuario us
 
             Producto producto = em.find(Producto.class, idProducto);
             if (producto == null) {
-                System.out.println("Producto no encontrado 😕");
+                System.out.println("Producto no encontrado ");
                 continue;
             }
 
@@ -474,21 +474,21 @@ private static void registrarVenta(EntityManager em, Scanner scanner, Usuario us
         String numeroFactura = "FAC-" + idFactura;
         Factura factura = new Factura(idFactura, cliente.getIdCliente(), fecha, totalVenta, usuarioLogeado.getIdusuario());
 
-        // Guardar todo en la base de datos
+        
         em.getTransaction().begin();
         em.persist(venta);
         for (DetalleFactura det : detalles) em.persist(det);
         em.persist(factura);
         em.getTransaction().commit();
 
-        // ===== IMPRIMIR FACTURA EN CONSOLA =====
+        // ===== IMPRIMIR FACTURA EN CONSOL =====
         System.out.println("\n===== FACTURA =====");
         System.out.println("Número: " + numeroFactura);
         System.out.println("Cliente: " + cliente.getNombre());
         System.out.println("Fecha: " + fecha);
         System.out.println("Productos:");
         for (DetalleFactura d : detalles) {
-            Producto p = em.find(Producto.class, d.getIdProducto()); // trae nombre del producto desde DB
+            Producto p = em.find(Producto.class, d.getIdProducto()); 
             System.out.println("  - " + p.getNombre() + " x" + d.getCantidad() + " = Q" + d.getSubtotal());
         }
         System.out.println("Total: Q" + totalVenta);

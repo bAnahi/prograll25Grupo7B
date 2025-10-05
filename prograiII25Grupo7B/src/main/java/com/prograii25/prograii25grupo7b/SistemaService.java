@@ -18,7 +18,7 @@ public class SistemaService {
         this.inventarioService = inventarioService;
     }
 
-    // Métodos de Usuario
+    
     public boolean registrarUsuario(Usuario usuario) {
         return usuarioService.registrarUsuarioConValidacion(usuario);
     }

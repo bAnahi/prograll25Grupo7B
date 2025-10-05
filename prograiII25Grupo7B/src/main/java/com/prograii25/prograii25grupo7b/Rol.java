@@ -1,4 +1,4 @@
-package com.prograii25.prograii25grupo7b; // nuevo paquete 'model', no 'db'
+package com.prograii25.prograii25grupo7b; 
 
 public enum Rol {
     ADMINISTRADOR,

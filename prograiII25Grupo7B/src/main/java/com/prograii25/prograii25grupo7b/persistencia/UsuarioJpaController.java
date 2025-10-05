@@ -77,7 +77,7 @@ public class UsuarioJpaController {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.merge(usuario); // merge actualiza el registro
+            em.merge(usuario); 
             em.getTransaction().commit();
             return true;
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class UsuarioJpaController {
                 em.getTransaction().commit();
                 return true;
             } else {
-                return false; // No se encontró el usuario
+                return false; 
             }
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();

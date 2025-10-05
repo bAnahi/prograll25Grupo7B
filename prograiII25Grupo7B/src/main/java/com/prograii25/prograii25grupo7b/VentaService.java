@@ -30,7 +30,7 @@ public class VentaService {
 
     public boolean registrarVenta(Venta venta, List<DetalleFactura> detalles) {
 
-        // Validar cliente
+        
         Cliente cliente = clientes.stream()
                 .filter(c -> c.getIdCliente() == venta.getIdCliente())
                 .findFirst()
@@ -40,7 +40,7 @@ public class VentaService {
             return false;
         }
 
-        // Validar usuario
+        
         Usuario usuario = usuarios.stream()
                 .filter(u -> u.getIdusuario() == venta.getIdUsuario())
                 .findFirst()

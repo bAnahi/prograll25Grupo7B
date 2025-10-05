@@ -37,7 +37,7 @@ public class ProductoJpaController {
         }
     }
 
-    // Obtener todos los productos
+    
     public List<Producto> findProductoEntities() {
         EntityManager em = getEntityManager();
         try {
@@ -48,7 +48,7 @@ public class ProductoJpaController {
         }
     }
 
-    // Buscar producto por ID
+  
     public Producto findProducto(long idProducto) {
         EntityManager em = getEntityManager();
         try {
