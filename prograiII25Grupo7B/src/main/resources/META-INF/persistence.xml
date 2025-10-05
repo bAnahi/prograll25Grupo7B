@@ -8,32 +8,30 @@
     <persistence-unit name="PU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
-        <!-- Entidades -->
-        <class>com.prograii25.prograii25grupo7b.db.Usuario</class>
+        <!-- entidades -->
+         <class>com.prograii25.prograii25grupo7b.db.Usuario</class>
         <class>com.prograii25.prograii25grupo7b.db.Cliente</class>
         <class>com.prograii25.prograii25grupo7b.db.Producto</class>
         <class>com.prograii25.prograii25grupo7b.db.Venta</class>
         <class>com.prograii25.prograii25grupo7b.db.Factura</class>
         <class>com.prograii25.prograii25grupo7b.db.DetalleFactura</class>
+        
 
+        <!--Si luego anotas las demás entidades con @Entity, se aagregan aquí -->
+        
         <properties>
-            <!-- Conexión a SQL Server -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1435;databaseName=SistemaEmpresaTecnologia;encrypt=false;trustServerCertificate=true"/>
-            <property name="javax.persistence.jdbc.user" value="JenniferAL"/>
-            <property name="javax.persistence.jdbc.password" value="Admin"/>
+            <!-- Conexión -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost\\MSSQLSERVER:1433;databaseName=EmpresaTecnologia;trustServerCertificate=true"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value="DiosEsBueno2024"/>
             <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
 
-            <!-- Generación de tablas -->
-            <!-- Para crear tablas automáticamente la primera vez: -->
-            <!-- <property name="eclipselink.ddl-generation" value="create-tables"/> -->
-            <!-- Luego poner en none para no tocar datos existentes -->
+            <!-- Importante: NO modificar tablas existentes -->
             <property name="eclipselink.ddl-generation" value="none"/>
 
-            <!-- Log de EclipseLink -->
+            <!-- Mostrar SQL en consola -->
             <property name="eclipselink.logging.level" value="FINE"/>
-            
-            <!-- Formato de fecha y compatibilidad SQL Server -->
-            <property name="eclipselink.target-database" value="SQLServer"/>
         </properties>
     </persistence-unit>
+
 </persistence>

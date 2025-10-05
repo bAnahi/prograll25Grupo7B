@@ -11,44 +11,42 @@ public class Factura {
     @Column(name = "id_factura")
     private long idFactura;
 
-    @Column(name = "id_venta")
-    private long idVenta;
-
-    @Column(name = "numero_factura")
-    private String numeroFactura;
+    @Column(name = "id_cliente")
+    private long idCliente;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "fecha_emision")
-    private Date fechaEmision;
+    @Column(name = "fecha")
+    private Date fecha;
 
     @Column(name = "total")
     private double total;
 
+    @Column(name = "id_usuario")
+    private long idUsuario;
+
     public Factura() {}
 
-    public Factura(long idFactura, long idVenta, String numeroFactura, Date fechaEmision, double total) {
+    public Factura(long idFactura, long idCliente, Date fecha, double total, long idUsuario) {
         this.idFactura = idFactura;
-        this.idVenta = idVenta;
-        this.numeroFactura = numeroFactura;
-        this.fechaEmision = fechaEmision;
+        this.idCliente = idCliente;
+        this.fecha = fecha;
         this.total = total;
+        this.idUsuario = idUsuario;
     }
 
     // Getters y setters
     public long getIdFactura() { return idFactura; }
     public void setIdFactura(long idFactura) { this.idFactura = idFactura; }
 
-    public long getIdVenta() { return idVenta; }
-    public void setIdVenta(long idVenta) { this.idVenta = idVenta; }
+    public long getIdCliente() { return idCliente; }
+    public void setIdCliente(long idCliente) { this.idCliente = idCliente; }
 
-    public String getNumeroFactura() { return numeroFactura; }
-    public void setNumeroFactura(String numeroFactura) { this.numeroFactura = numeroFactura; }
-
-    public Date getFechaEmision() { return fechaEmision; }
-    public void setFechaEmision(Date fechaEmision) { this.fechaEmision = fechaEmision; }
+    public Date getFecha() { return fecha; }
+    public void setFecha(Date fecha) { this.fecha = fecha; }
 
     public double getTotal() { return total; }
     public void setTotal(double total) { this.total = total; }
+
+    public long getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(long idUsuario) { this.idUsuario = idUsuario; }
 }
-
-

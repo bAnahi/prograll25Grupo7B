@@ -7,12 +7,15 @@ import com.prograii25.prograii25grupo7b.db.DetalleFactura;
 import com.prograii25.prograii25grupo7b.db.Venta;
 import com.prograii25.prograii25grupo7b.persistencia.UsuarioJpaController;
 import com.prograii25.prograii25grupo7b.db.Permisos;
+import com.prograii25.prograii25grupo7b.db.Factura;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class PrograiII25Grupo7B {
 
@@ -96,53 +99,53 @@ public class PrograiII25Grupo7B {
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_USUARIOS")) registrarUsuario(em, scanner);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
-                case 4:
+                case 3:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_USUARIOS")) editarUsuario(em, scanner);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
-                case 5:
+                case 4:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_USUARIOS")) eliminarUsuario(em, scanner);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
 
                 // ---- CLIENTES ----
-                case 6:
+                case 5:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_CLIENTES")) listarClientes(em);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
-                case 7:
+                case 6:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_CLIENTES")) registrarCliente(em, scanner);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
-                case 8:
+                case 7:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_CLIENTES")) editarCliente(em, scanner);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
-                case 9:
+                case 8:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_CLIENTES")) eliminarCliente(em, scanner);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
 
                 // ---- PRODUCTOS ----
-                case 10:
+                case 9:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_PRODUCTOS")) listarProductos(em);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
-                case 11:
+                case 10:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_PRODUCTOS")) registrarProducto(em, scanner);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
-                case 12:
+                case 11:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_PRODUCTOS")) editarProducto(em, scanner);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
-                case 13:
+                case 12:
                     if (Permisos.tienePermiso(rolUsuario, "GESTIONAR_PRODUCTOS")) eliminarProducto(em, scanner);
                     else System.out.println("No tiene permiso para esta acción.");
                     break;
 
                 // ---- VENTAS ----
-                case 3:
+                case 13:
                     if (Permisos.tienePermiso(rolUsuario, "REGISTRAR_VENTA")) registrarVenta(em, scanner, usuarioLogeado);
                     else System.out.println("No tiene permiso para esta accion.");
                     break;
@@ -402,78 +405,100 @@ public class PrograiII25Grupo7B {
         System.out.println("Producto eliminado ?");
     }
 
+   
     // -------------------- VENTAS --------------------
-    private static void registrarVenta(EntityManager em, Scanner scanner, Usuario usuarioLogeado) {
-        try {
-            System.out.print("Ingrese ID del cliente: ");
-            long idCliente = scanner.nextLong();
+private static void registrarVenta(EntityManager em, Scanner scanner, Usuario usuarioLogeado) {
+    try {
+        System.out.print("Ingrese ID del cliente: ");
+        long idCliente = scanner.nextLong();
+        scanner.nextLine();
+
+        Cliente cliente = em.find(Cliente.class, idCliente);
+        if (cliente == null) {
+            System.out.println("Cliente no encontrado 😕");
+            return;
+        }
+
+        long idVenta = System.currentTimeMillis();
+        java.util.Date fecha = new java.util.Date();
+        double totalVenta = 0.0;
+
+        // Crear la venta
+        Venta venta = new Venta(idVenta, cliente.getIdCliente(), usuarioLogeado.getIdusuario(), fecha, totalVenta);
+
+        List<DetalleFactura> detalles = new java.util.ArrayList<>();
+        boolean agregarMas = true;
+
+        while (agregarMas) {
+            List<Producto> productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+            System.out.println("\n===== Lista de Productos =====");
+            for (Producto p : productos) {
+                System.out.println(p.getIdProducto() + " | " + p.getNombre() + " | Q" + p.getPrecioUnitario());
+            }
+
+            System.out.print("Ingrese ID del producto: ");
+            long idProducto = scanner.nextLong();
             scanner.nextLine();
 
-            Cliente cliente = em.find(Cliente.class, idCliente);
-            if (cliente == null) {
-                System.out.println("Cliente no encontrado ?");
-                return;
+            Producto producto = em.find(Producto.class, idProducto);
+            if (producto == null) {
+                System.out.println("Producto no encontrado 😕");
+                continue;
             }
 
-            long idVenta = System.currentTimeMillis();
-            java.util.Date fecha = new java.util.Date();
-            double totalVenta = 0.0;
+            System.out.print("Ingrese cantidad: ");
+            int cantidad = scanner.nextInt();
+            scanner.nextLine();
 
-            Venta venta = new Venta(idVenta, cliente.getIdCliente(), usuarioLogeado.getIdusuario(), fecha, totalVenta);
+            float subtotal = cantidad * producto.getPrecioUnitario();
+            totalVenta += subtotal;
 
-            List<DetalleFactura> detalles = new java.util.ArrayList<>();
-            boolean agregarMas = true;
+            long idDetalle = System.currentTimeMillis();
+            DetalleFactura detalle = new DetalleFactura();
+            detalle.setIdDetalle(idDetalle);
+            detalle.setVenta(venta);
+            detalle.setIdProducto(idProducto);
+            detalle.setCantidad(cantidad);
+            detalle.setSubtotal(subtotal);
+            detalle.setPrecioUnitario(producto.getPrecioUnitario());
 
-            while (agregarMas) {
-                List<Producto> productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
-                System.out.println("\n===== Lista de Productos =====");
-                for (Producto p : productos) {
-                    System.out.println(p.getIdProducto() + " | " + p.getNombre() + " | Q" + p.getPrecioUnitario());
-                }
+            detalles.add(detalle);
 
-                System.out.print("Ingrese ID del producto: ");
-                long idProducto = scanner.nextLong();
-                scanner.nextLine();
-
-                Producto producto = em.find(Producto.class, idProducto);
-                if (producto == null) {
-                    System.out.println("Producto no encontrado ?");
-                    continue;
-                }
-
-                System.out.print("Ingrese cantidad: ");
-                int cantidad = scanner.nextInt();
-                scanner.nextLine();
-
-                float subtotal = cantidad * producto.getPrecioUnitario();
-                totalVenta += subtotal;
-
-                long idDetalle = System.currentTimeMillis();
-                DetalleFactura detalle = new DetalleFactura();
-                detalle.setIdDetalle(idDetalle);
-                detalle.setVenta(venta);
-                detalle.setIdProducto(idProducto);
-                detalle.setCantidad(cantidad);
-                detalle.setSubtotal(subtotal);
-
-                detalles.add(detalle);
-
-                System.out.print("¿Desea agregar otro producto? (S/N): ");
-                String resp = scanner.nextLine();
-                if (!resp.equalsIgnoreCase("S")) agregarMas = false;
-            }
-
-            em.getTransaction().begin();
-            em.persist(venta);
-            for (DetalleFactura det : detalles) em.persist(det);
-            em.getTransaction().commit();
-
-            System.out.println("Venta registrada ? Total: Q" + totalVenta);
-
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            e.printStackTrace();
-            System.out.println("Error al registrar la venta ?");
+            System.out.print("¿Desea agregar otro producto? (S/N): ");
+            String resp = scanner.nextLine();
+            if (!resp.equalsIgnoreCase("S")) agregarMas = false;
         }
+
+        // Crear la factura
+        long idFactura = System.currentTimeMillis() + 1;
+        String numeroFactura = "FAC-" + idFactura;
+        Factura factura = new Factura(idFactura, cliente.getIdCliente(), fecha, totalVenta, usuarioLogeado.getIdusuario());
+
+        // Guardar todo en la base de datos
+        em.getTransaction().begin();
+        em.persist(venta);
+        for (DetalleFactura det : detalles) em.persist(det);
+        em.persist(factura);
+        em.getTransaction().commit();
+
+        // ===== IMPRIMIR FACTURA EN CONSOLA =====
+        System.out.println("\n===== FACTURA =====");
+        System.out.println("Número: " + numeroFactura);
+        System.out.println("Cliente: " + cliente.getNombre());
+        System.out.println("Fecha: " + fecha);
+        System.out.println("Productos:");
+        for (DetalleFactura d : detalles) {
+            Producto p = em.find(Producto.class, d.getIdProducto()); // trae nombre del producto desde DB
+            System.out.println("  - " + p.getNombre() + " x" + d.getCantidad() + " = Q" + d.getSubtotal());
+        }
+        System.out.println("Total: Q" + totalVenta);
+        System.out.println("==================");
+
+    } catch (Exception e) {
+        if (em.getTransaction().isActive()) em.getTransaction().rollback();
+        e.printStackTrace();
+        System.out.println("Error al registrar la venta ❌");
     }
+}
+
 }

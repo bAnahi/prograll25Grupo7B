@@ -1,4 +1,4 @@
-package com.prograii25.prograii25grupo7b.db;
+/*package com.prograii25.prograii25grupo7b.db;
 
 import javax.persistence.*;
 
@@ -65,3 +65,4 @@ public class DetalleVenta {
         this.subtotal = this.cantidad * this.precioUnitario;
     }
 }
+*\
