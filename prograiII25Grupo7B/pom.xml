@@ -31,5 +31,17 @@
             <version>2.7.12</version>
         </dependency>
     </dependencies>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <configuration>
+                <mainClass>com.prograii25.prograii25grupo7b.PrograII25Grupo7B</mainClass>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
 
 </project>

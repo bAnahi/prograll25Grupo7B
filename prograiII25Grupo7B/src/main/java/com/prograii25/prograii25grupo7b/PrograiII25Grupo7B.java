@@ -259,32 +259,41 @@ public class PrograiII25Grupo7B {
         List<Cliente> clientes = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
         System.out.println("\n===== Lista de Clientes =====");
         for (Cliente c : clientes) {
-            System.out.println(c.getIdCliente() + " | " + c.getNombre() + " | " + c.getTelefono());
+            System.out.println(c.getIdCliente() + " | " + c.getNombre() + " | " + c.getTelefono() + " | " + c.getCorreo() + " | " + c.getDireccion());
         }
     }
 
     private static void registrarCliente(EntityManager em, Scanner scanner) {
-        System.out.print("ID Cliente: ");
-        long id = scanner.nextLong();
-        scanner.nextLine();
+    System.out.print("ID Cliente: ");
+    long id = scanner.nextLong();
+    scanner.nextLine();
 
-        System.out.print("Nombre: ");
-        String nombre = scanner.nextLine();
+    System.out.print("Nombre: ");
+    String nombre = scanner.nextLine();
 
-        System.out.print("Telefono: ");
-        String tel = scanner.nextLine();
+    System.out.print("Teléfono: ");
+    String tel = scanner.nextLine();
 
-        Cliente c = new Cliente();
-        c.setIdCliente(id);
-        c.setNombre(nombre);
-        c.setTelefono(tel);
+    System.out.print("Correo: ");
+    String correo = scanner.nextLine();
 
-        em.getTransaction().begin();
-        em.persist(c);
-        em.getTransaction().commit();
+    System.out.print("Dirección: ");
+    String direccion = scanner.nextLine();
 
-        System.out.println("Cliente registrado ?");
-    }
+    Cliente c = new Cliente();
+    c.setIdCliente(id);
+    c.setNombre(nombre);
+    c.setTelefono(tel);
+    c.setCorreo(correo);
+    c.setDireccion(direccion);
+
+    em.getTransaction().begin();
+    em.persist(c);
+    em.getTransaction().commit();
+
+    System.out.println("Cliente registrado correctamente.");
+}
+
 
     private static void editarCliente(EntityManager em, Scanner scanner) {
         System.out.print("Ingrese ID del cliente a editar: ");
@@ -423,7 +432,7 @@ private static void registrarVenta(EntityManager em, Scanner scanner, Usuario us
         java.util.Date fecha = new java.util.Date();
         double totalVenta = 0.0;
 
-        
+        // Crear la venta
         Venta venta = new Venta(idVenta, cliente.getIdCliente(), usuarioLogeado.getIdusuario(), fecha, totalVenta);
 
         List<DetalleFactura> detalles = new java.util.ArrayList<>();
@@ -442,7 +451,7 @@ private static void registrarVenta(EntityManager em, Scanner scanner, Usuario us
 
             Producto producto = em.find(Producto.class, idProducto);
             if (producto == null) {
-                System.out.println("Producto no encontrado ");
+                System.out.println("Producto no encontrado 😕");
                 continue;
             }
 
@@ -481,7 +490,7 @@ private static void registrarVenta(EntityManager em, Scanner scanner, Usuario us
         em.persist(factura);
         em.getTransaction().commit();
 
-        // ===== IMPRIMIR FACTURA EN CONSOL =====
+        // ===== FACTURA EN CONSOoA =====
         System.out.println("\n===== FACTURA =====");
         System.out.println("Número: " + numeroFactura);
         System.out.println("Cliente: " + cliente.getNombre());
@@ -497,7 +506,7 @@ private static void registrarVenta(EntityManager em, Scanner scanner, Usuario us
     } catch (Exception e) {
         if (em.getTransaction().isActive()) em.getTransaction().rollback();
         e.printStackTrace();
-        System.out.println("Error al registrar la venta ❌");
+        System.out.println("Error al registrar la venta ");
     }
 }
 

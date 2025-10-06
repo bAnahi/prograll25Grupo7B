@@ -53,6 +53,7 @@ public class InventarioService {
         return false;
     }
 
+    // Reducir stock
     public boolean reducirStock(long idProducto, int cantidad) {
         EntityTransaction tx = em.getTransaction();
         try {
@@ -78,7 +79,7 @@ public class InventarioService {
         return false;
     }
 
-    
+    // Listar todo el inventario
     public List<Inventario> listarInventario() {
         try {
             TypedQuery<Inventario> query = em.createQuery(
@@ -90,7 +91,7 @@ public class InventarioService {
         return null;
     }
 
-    
+    // Cerrar EntityManager al terminar
     public void cerrar() {
         if (em != null) em.close();
         if (emf != null) emf.close();
